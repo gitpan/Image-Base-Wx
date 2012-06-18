@@ -15,34 +15,35 @@ not run its Makefile.PL or Build.PL.
 Hash: SHA1
 
 SHA1 842745cb706f8f2126506f544492f7a80dbe29b3 COPYING
-SHA1 b6539f8e0b705fe7adea0065f0a9da877d2708fb Changes
-SHA1 50053757186821c864623756a41fd3b6d5973f1c MANIFEST
+SHA1 74ec7646da6422ebe72bdecc9c9d626d0be46ec3 Changes
+SHA1 1dac7aa3441946faeb5f527c966ef83cc394dbe5 MANIFEST
 SHA1 6e3dfa4a933a1a5da6c934cca324fc40495b2f5d MANIFEST.SKIP
-SHA1 1912e57734cb2fc21c74ea94d176608f2d2658d4 META.yml
+SHA1 2154d5447639af694d5d729d0cac7b5eb93265cf META.yml
 SHA1 06d02651f8cfedee36fec2ea32ca6d1432a64108 Makefile.PL
-SHA1 17347afbf27ef40acb37c7d24965da6861a5d11b debian/changelog
+SHA1 f3dd3011ef7f25a6cb6c704ad3423263859a1450 debian/changelog
 SHA1 ac3478d69a3c81fa62e60f5c3696165a4e5e6ac4 debian/compat
 SHA1 01ba5728a7db4d1dd361f17f98e27ff487c1fcab debian/control
 SHA1 ef0538410e105aa87c20ddd36eb92d097d898b99 debian/copyright
 SHA1 75371ace64ff775e92d63fd5250cbe4bab487e48 debian/rules
 SHA1 61652cd1568dcf2614df833eba241755eee34e89 debian/source/format
 SHA1 c936fc0ab0ffc461a37f1d4ce014829bdef17202 debian/watch
-SHA1 059ac2607e7df40ff278d5ae0a0d483a4847b4b5 devel/Bitmap-use.t
-SHA1 981f2c75dad47cecbfb663268d941459aa2842af devel/Bitmap-weaken.t
-SHA1 1daf751a625666692c6199f2811f4ee559007d9e devel/Bitmap.pm
-SHA1 6408431bca8879d95f72a12444ee0392da89dc74 devel/Bitmap.t
+SHA1 3c7527faa611abb4fee689489dd37bfd3a0a81d5 devel/GNUmakefile
 SHA1 5fd35880152388d4ebf372142580eaae5b248b45 devel/LogCapture.pm
 SHA1 337a96b40cd579a65266ced3fdab94f33d7ff74a devel/LogSaver.pm
-SHA1 4c15643645c23fafe54cd5c37e5b7abc899fe1d1 devel/bitmap.pl
+SHA1 8feafbd222f50dbc7a884f1537e6e7c8c9808dcd devel/bitmap.pl
 SHA1 367c4e4a54cbab56a028cbf4f48beaa4b1aff7f3 devel/dc.pl
+SHA1 67223ca3c33d9759fd3569d90a580ab16ac5bf7d devel/exe-bitmap-load-xpm.cc
 SHA1 9a5c57bfacf74be70a80dc6bd3d2e3bb26f5f384 devel/image.pl
 SHA1 7490c21419a5c0094e62b70870f22e3ec38dc776 devel/log.pl
 SHA1 73b45edd7c7675a9793ad4cb3232002b1af9435e devel/magick.pl
-SHA1 d315d8a345f494a568cf4591e1138d5e36ef7fd9 lib/Image/Base/Wx/DC.pm
-SHA1 ce4d130cb205d5de1fdf9fc9da47697dc9c0800c lib/Image/Base/Wx/Image.pm
-SHA1 3e6d19e89d4e1f800b61435fc3a020fab274e542 t/DC.t
+SHA1 b9d448e83a8782fadbd50ede0717ec79afca5b85 lib/Image/Base/Wx/Bitmap.pm
+SHA1 ccf353d041acd540674634328fa3c4282d18a702 lib/Image/Base/Wx/DC.pm
+SHA1 051bbc2a3b24198a6a5844137375196c531a3843 lib/Image/Base/Wx/Image.pm
+SHA1 981f2c75dad47cecbfb663268d941459aa2842af t/Bitmap-weaken.t
+SHA1 6c9887bd45d55727372e3a641b6dc95df0ff7777 t/Bitmap.t
+SHA1 d0432eb7eb94ef75624036460a1afda0cb228f7a t/DC.t
 SHA1 e556fdb03f27b18dc28a8b7fb066c9ef4fc22d1a t/Image-weaken.t
-SHA1 c2526b26b6891e7058801cbf476ef8b813434b2f t/Image.t
+SHA1 0451c3a331f9e4029fa7f35d2b0aaefaf21fbb8b t/Image.t
 SHA1 3855de075da37f5bc4e6a5534b2f00cc14872a98 t/MyTestHelpers.pm
 SHA1 f0fb4938250b2c5be37363f238c5130fd583df84 t/MyTestImageBase.pm
 SHA1 811028548aa4b360b5086d1af3150f9dde348aa6 xt/0-META-read.t
@@ -53,6 +54,7 @@ SHA1 083242d959c1a9242c874982e4585872a95bec93 xt/0-Test-Synopsis.t
 SHA1 ec454b1b524d2d0b35e5a7d8292ad13d82becab5 xt/0-Test-YAML-Meta.t
 SHA1 2fb2ce60ce5c740d1eb7e3b55a96f3ccb84d38c3 xt/0-file-is-part-of.t
 SHA1 daba2840c7f128371d42516619a0e04fee2f5ff4 xt/0-no-debug-left-on.t
+SHA1 059ac2607e7df40ff278d5ae0a0d483a4847b4b5 xt/display/Bitmap-use.t
 SHA1 3468d8e9105f30cc353cc7e90a6ad4be47fe16fa xt/display/DC-use.t
 SHA1 da9e4d6a66b0e425818679435de0236d59fa3b13 xt/display/Image-use.t
 SHA1 84a47c1d71fd58797a2754030998dfb673b62811 xtools/my-check-copyright-years.sh
@@ -68,7 +70,7 @@ SHA1 631dabf52c65a7b8613d6565fef2c2416ebba7e9 xtools/my-wunused.sh
 -----BEGIN PGP SIGNATURE-----
 Version: GnuPG v1.4.11 (GNU/Linux)
 
-iD8DBQFP28WkLFMCIV9q3ToRAshEAJ9zjUzMSxSa0Cr3s0i8kgvAGyR57QCfVPlS
-/87kUQbnRPbpGMsOZ8g2vmw=
-=EiQ5
+iD8DBQFP37sBLFMCIV9q3ToRAhzOAJ98qb7bWbBfT4JIfgAbD2OSbT/R/QCdGlBZ
+lRTh10l+f4yohWsSSsEtHWg=
+=+/89
 -----END PGP SIGNATURE-----

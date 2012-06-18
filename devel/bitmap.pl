@@ -25,12 +25,116 @@ use Wx;
 use Smart::Comments;
 
 {
-  # read png
+  # bitmap free before DC
+  my $wxbitmap = Wx::Bitmap->new (20, 10);
+  my $dc = Wx::MemoryDC->new;
+  $dc->SelectObject($wxbitmap);
+  $dc->IsOk or die;
+  undef $wxbitmap;
+  ### $dc
+  ### depth: $dc->GetDepth
+  $dc->Clear;
+  ### GetObject: $dc->GetObject
+  undef $dc;
+  ### $wxbitmap
+  
+  exit 0;
+}
+{
+  # failed load of each format
+  my $filename = '/dev/null';
+  my $wxbitmap = Wx::Bitmap->new (20, 10);
+  foreach my $file_format (qw(BMP
+                              GIF
+                              JPEG
+                              PCX
+                              PNG
+                              PNM
+                              TIF
+                              CUR
+                              ICO
+                              XPM
+                              ANI
+                            )) {
+    ### $file_format
+    my $type = eval "Wx::wxBITMAP_TYPE_${file_format}()";
+    my $ret = $wxbitmap->LoadFile($filename,$type);
+  }
+  exit 0;
+}
+
+{
+  # read
+  # Wx::InitAllImageHandlers();
+  #Wx::Image::AddHandler (Wx::PNGHandler->new);
+  #Wx::Image::AddHandler (Wx::GIFHandler->new);
+
+  my $filename = '/usr/share/doc/wx2.8-examples/examples/samples/dnd/wxwin.png';
+  $filename = '/usr/share/doc/wx2.8-examples/examples/samples/access/mondrian.xpm';
+  $filename = '/usr/share/pyshared/pygame/pygame_icon.tiff';
+  $filename = '/usr/share/doc/dhttpd/dhttpd102.gif';
+  my $wxbitmap = Wx::Bitmap->new (20, 10);
+  print "any ",Wx::wxBITMAP_TYPE_ANY(),"\n";
+  print "xpm ",Wx::wxBITMAP_TYPE_XPM(),"\n";
+  {
+    my $ret = $wxbitmap->LoadFile($filename,Wx::wxBITMAP_TYPE_PNG());
+    ### $ret
+    ### width: $wxbitmap->GetWidth
+  }
+  {
+    my $ret = $wxbitmap->LoadFile($filename,Wx::wxBITMAP_TYPE_TIF());
+    ### $ret
+    ### width: $wxbitmap->GetWidth
+  }
+  {
+    my $ret = $wxbitmap->LoadFile($filename,Wx::wxBITMAP_TYPE_GIF());
+    ### $ret
+    ### width: $wxbitmap->GetWidth
+  }
+  {
+    my $ret = $wxbitmap->LoadFile($filename,Wx::wxBITMAP_TYPE_ANY());
+    ### $ret
+    ### width: $wxbitmap->GetWidth
+  }
+  {
+    my $ret = $wxbitmap->LoadFile($filename,Wx::wxBITMAP_TYPE_XPM());
+    ### $ret
+    ### width: $wxbitmap->GetWidth
+  }
+  exit 0;
+}
+
+__END__
+
+{
+  # read Image::Base::Wx::Bitmap
   Wx::InitAllImageHandlers();
   require Image::Base::Wx::Bitmap;
   my $image = Image::Base::Wx::Bitmap->new
     (-file => '/usr/share/doc/wx2.8-examples/examples/samples/dnd/wxwin.png');
   ### $image
+  exit 0;
+}
+
+{
+  # write
+
+  Wx::InitAllImageHandlers();
+  {
+    my $handler = Wx::Bitmap::FindHandlerType(Wx::wxBITMAP_TYPE_BMP());
+    ### $handler
+  }
+  my $wxbitmap = Wx::Bitmap->new (20, 10);
+  # system ('cat /tmp/x.bmp');
+  {
+    my $ret = $wxbitmap->LoadFile('/usr/share/doc/wx2.8-examples/examples/samples/access/mondrian.xpm',Wx::wxBITMAP_TYPE_XPM());
+    ### $ret
+    ### width: $wxbitmap->GetDepth
+  }
+  {
+    my $ret = $wxbitmap->SaveFile('/tmp/x.bmp',Wx::wxBITMAP_TYPE_BMP());
+    ### $ret
+  }
   exit 0;
 }
 {

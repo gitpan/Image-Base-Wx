@@ -43,7 +43,7 @@ $dc->SetPen($pen);
 #------------------------------------------------------------------------------
 # VERSION
 
-my $want_version = 1;
+my $want_version = 2;
 is ($Image::Base::Wx::DC::VERSION,
     $want_version, 'VERSION variable');
 is (Image::Base::Wx::DC->VERSION,
@@ -94,11 +94,25 @@ ok (! eval { Image::Base::Wx::DC->VERSION($check_version); 1 },
   foreach my $colour ('black',
                       'white',
                       '#FF00FF',
-                      '#0000AAAAbbbb',
-                      '#000AAAbbb',
-                      '#F0F',
+
+                      # platform dependent, no good on msdos
+                      # '#0000AAAAbbbb',
                      ) {
     $image->_dc_pen($colour);
+  }
+
+  # these platform dependent, maybe
+  foreach my $colour (
+                      '#F0F',
+                      '#000AAAbbb',
+                      '#0000FFFF0000',
+                      '#0000AAAAbbbb',
+                     ) {
+    if (eval { $image->_dc_pen($colour); 1 }) {
+      diag "_dc_pen($colour) works";
+    } else {
+      diag "_dc_pen($colour) no good: ",$@;
+    }
   }
 }
 

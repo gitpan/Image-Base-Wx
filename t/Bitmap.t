@@ -28,7 +28,7 @@ BEGIN { MyTestHelpers::nowarnings() }
 eval { require Wx }
   or plan skip_all => "due to Wx display not available -- $@";
 
-plan tests => 2498;
+plan tests => 2509;
 
 use_ok ('Image::Base::Wx::Bitmap');
 diag "Image::Base version ", Image::Base->VERSION;
@@ -40,7 +40,7 @@ diag "Image::Base version ", Image::Base->VERSION;
 #------------------------------------------------------------------------------
 # VERSION
 
-my $want_version = 1;
+my $want_version = 2;
 is ($Image::Base::Wx::Bitmap::VERSION,
     $want_version, 'VERSION variable');
 is (Image::Base::Wx::Bitmap->VERSION,
@@ -53,7 +53,46 @@ ok (! eval { Image::Base::Wx::Bitmap->VERSION($check_version); 1 },
     "VERSION class check $check_version");
 
 #------------------------------------------------------------------------------
-# line
+# save() then load() each format
+
+{
+  Wx::InitAllImageHandlers();
+  my @file_formats = (qw(BMP
+                         GIF
+                         JPEG
+                         PCX
+                         PNG
+                         PNM
+                         TIF
+                         CUR
+                         ICO
+                         ANI
+                         XPM
+                       ));
+  my $filename = 'tempfile';
+  foreach my $file_format (@file_formats) {
+  SKIP: {
+      my $got_file_format;
+      {
+        my $image = Image::Base::Wx::Bitmap->new
+          (-width => 20, -height => 10,
+           -file_format => $file_format);
+        eval { $image->save($filename); 1 }
+          or skip "due to cannot save $file_format", 1;
+      }
+      {
+        my $image = Image::Base::Wx::Bitmap->new
+          (-file => $filename);
+        $got_file_format = $image->get('-file_format');
+        is ($got_file_format, $file_format);
+      }
+    }
+  }
+  unlink $filename;
+}
+
+#------------------------------------------------------------------------------
+# line()
 
 {
   my $image = Image::Base::Wx::Bitmap->new
@@ -175,6 +214,7 @@ ok (! eval { Image::Base::Wx::Bitmap->VERSION($check_version); 1 },
           'save(no/such/dir)');
   }
 }
+
 
 #------------------------------------------------------------------------------
 # xy

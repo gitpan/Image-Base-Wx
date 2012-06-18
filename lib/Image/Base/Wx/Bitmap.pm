@@ -17,19 +17,17 @@
 
 
 package Image::Base::Wx::Bitmap;
-use 5.004;
+use 5.008;
 use strict;
 use Carp;
 use Wx;
-
-use vars '$VERSION','@ISA';
-$VERSION = 1;
+our $VERSION = 2;
 
 use Image::Base::Wx::DC;
-@ISA = ('Image::Base::Wx::DC');
+our @ISA = ('Image::Base::Wx::DC');
 
 # uncomment this to run the ### lines
-use Smart::Comments;
+#use Smart::Comments;
 
 
 sub new {
@@ -53,7 +51,7 @@ sub new {
     # clone wxbitmap if a new one not given in the %params
     if (! defined $wxbitmap) {
       ### copy ...
-      # maybe no copy-on-write constructor in 0.9901 ?
+      # maybe no copy-on-write constructor in 0.9909 ?
       $wxbitmap = $class_or_self->{'-wxbitmap'};
       ### $wxbitmap
       $wxbitmap = $wxbitmap->GetSubBitmap
@@ -153,16 +151,20 @@ my @file_formats = (qw(BMP
                        PNG
                        PNM
                        TIF
-                       XPM
                        CUR
                        ICO
-                       ANI));
+                       ANI
+                       XPM
+                     ));
 my @bitmap_types = map { my $constant = "wxBITMAP_TYPE_$_";
                         my $type = eval "Wx::$constant()";
                         if (! defined $type) {
                           die "Oops, no $constant: $@";
                         }
                         $type } @file_formats;
+my %file_formats = (map {$file_formats[$_] => $bitmap_types[$_]}
+                    0 .. $#file_formats);
+$file_formats{'JPG'} = $file_formats{'JPEG'};
 ### @bitmap_types
 
 sub load {
@@ -174,9 +176,8 @@ sub load {
   }
   ### load: $filename
 
-  $filename = "$filename"; # stringize to dispatch to file read
-  open my $fh, '<', $filename
-    or croak "Cannot load $filename: $!";
+  # stringize in case perhaps future LoadFile() overloads to a handle too
+  $filename = "$filename";
 
   my $wxbitmap = $self->{'-wxbitmap'};
   foreach my $i (0 .. $#file_formats) {
@@ -194,23 +195,18 @@ sub load {
     #   return;
     # }
 
-    if ($wxbitmap->LoadFile ($fh, $type)) {
+    if ($wxbitmap->LoadFile ($filename, $type)) {
       ### loaded ...
       ### wxbitmap isok: $wxbitmap->IsOk
       $self->{'-file_format'} = $file_format;
       return;
     }
-
-    seek $fh,0,0 or croak "Cannot rewind $filename: $!";
   }
-  croak "Cannot load ",$filename;
 
-    # if ($wxbitmap->LoadFile($filename,$type)) {
-    #   $self->{'-file_format'} = $type;
-    #   return;
-    # }
+  croak "Cannot load ",$filename;
 }
 
+# Would have to copy to a tempfile.
 # sub load_fh {
 #   my ($self, $fh, $filename) = @_;
 #   ### load_fh()
@@ -231,25 +227,20 @@ sub save {
 
   my $file_format = $self->get('-file_format')
     || croak "-file_format not set";
-  $file_format = lc($file_format);
-  if ($file_format eq 'jpg') {
-    $file_format = 'jpeg';
+  my $type = $file_formats{uc($file_format)};
+  if (! defined $type) {
+    croak "Unrecognised file format ",$self->get('-file_format');
   }
+  ### $file_format
+  ### $type
 
-  my $wxbitmap = $self->{'-wxbitmap'};
-  foreach my $i (0 .. $#file_formats) {
-    my $file_format = $file_formats[$i];
-    my $type = $bitmap_types[$i];
-    ### $file_format
-    ### $type
-
-    if ($wxbitmap->SaveFile($filename,$type)) {
-      return;
-    }
+  if ($self->{'-wxbitmap'}->SaveFile($filename,$type)) {
+    return;
   }
-  croak "Cannot load ",$filename;
+  croak "Cannot save ",$filename;
 }
 
+# Would have to SaveFile() to a file and then copy to $fh.
 # sub save_fh {
 #   my ($self, $fh, $filename) = @_;
 # 
@@ -289,7 +280,7 @@ Image::Base::Wx::Bitmap -- draw into a Wx::Bitmap
 
 =head1 CLASS HIERARCHY
 
-C<Image::Base::Wx::Bitmap> is a subclass of C<Image::Base>,
+C<Image::Base::Wx::Bitmap> is a subclass of C<Image::Base::Wx::DC>,
 
     Image::Base
       Image::Base::Wx::DC
@@ -298,13 +289,47 @@ C<Image::Base::Wx::Bitmap> is a subclass of C<Image::Base>,
 =head1 DESCRIPTION
 
 C<Image::Base::Wx::Bitmap> extends C<Image::Base> to draw into a
-C<Wx::Bitmap>, including image file load and save to a C<Wx::Bitmap>.
+C<Wx::Bitmap>.
 
-C<Wx::Bitmap> is a platform-dependent colour image.  The bits-per-pixel
-supported depend on the platform, but should include at least 1-bit
-monochrome and the depth of the screen.
+C<Wx::Bitmap> is a platform-dependent colour image with a specified
+bits-per-pixel depth.  The supported depths depend on the platform but
+include at least the screen depth and 1-bit monochrome.
 
-Drawing is done through a C<Wx::MemoryDC> as per C<Image::Base::Wx::DC>.
+Drawing is done with a wxMemoryDC as per the C<Image::Base::Wx::DC>.  This
+subclass adds file load and save for the C<Wx::Bitmap>.
+
+=head2 File Formats
+
+The file formats supported in Wx 2.8 include the following, perhaps
+depending which supporting libraries it was built with.
+
+    BMP      always available
+    PNG
+    JPEG
+    GIF      load-only
+    PCX
+    PNM
+    TIFF
+    TGA      load-only
+    IFF      load-only
+    XPM
+    ICO
+    CUR
+    ANI      load-only
+
+C<load()> detects the format, but a handler for the format must have been
+registered globally.  All formats can be registered with
+
+    Wx::InitAllImageHandlers();
+
+This is suggested since otherwise load XPM seems to behave as an "ANY" which
+might trick the detection attempts.  The C<Wx::Image> handlers are used by
+C<Wx::Bitmap> so registering desired formats there might be enough.
+
+=head2 Colour Names
+
+Colour names are anything recognised by C<< Wx::Colour->new() >>, as
+described in L<Image::Base::Wx::DC/Colour Names>.
 
 =head1 FUNCTIONS
 
@@ -324,9 +349,10 @@ bits-per-pixel of the screen, or something else can be given.
 
     $image = Image::Base::Wx::Bitmap->new
                  (-width  => 200,
-                  -height => 100);
+                  -height => 100,
+                  -depth => 1);   # monochrome
 
-Or it can be pointed at an existing C<Wx::Bitmap>,
+Or a new image can be pointed at an existing C<Wx::Bitmap>,
 
     my $wxbitmap = Wx::Bitmap->new (200, 100);
     my $image = Image::Base::Wx::Bitmap->new
@@ -344,7 +370,7 @@ Further parameters are applied per C<set> (see L</ATTRIBUTES> below).
 
 The target bitmap object.
 
-=item C<-dc> (C<Wx::DC> object)
+=item C<-dc> (C<Wx::MemoryDC> object)
 
 The C<Wx::DC> used to draw into the bitmap.  A suitable DC is created for
 the bitmap automatically, but it can be set explicitly if desired.
@@ -370,10 +396,18 @@ reformatted dynamically?
 
 =back
 
+=head1 BUGS
+
+Wx circa 2.8.12 on Gtk prints C<g_log()> warnings on attempting to load an
+unknown file format, including an empty file or garbage.  This is apparently
+from attempting it as an XPM.  Is that a Wx bug?
+
 =head1 SEE ALSO
 
+L<Wx>,
 L<Image::Base>,
-L<Wx>
+L<Image::Base::Wx::DC>,
+L<Image::Base::Wx::Image>
 
 =head1 HOME PAGE
 

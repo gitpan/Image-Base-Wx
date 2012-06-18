@@ -21,7 +21,7 @@ use 5.008;
 use strict;
 use Carp;
 use Wx;
-our $VERSION = 1;
+our $VERSION = 2;
 
 use Image::Base;
 our @ISA = ('Image::Base');
@@ -340,18 +340,6 @@ sub colour_to_rgb {
             substr ($colour, 1, $len),      # groups of $len each
             substr ($colour, 1+$len, $len),
             substr ($colour, -$len));
-  }
-
-  # hex values turned into doubles by spacing equally from 00 -> 0.0 through
-  # FF -> 1.0, or FFFF -> 1.0.
-  if (my @rgb = ($colour =~ /^#([0-9A-F]{2})([0-9A-F]{2})([0-9A-F]{2})$/i)) {
-    return map {hex()} @rgb;
-  }
-  if (my @rgb = ($colour =~ /^#([0-9A-F]{3})([0-9A-F]{3})([0-9A-F]{3})$/i)) {
-    return map {hex() >> 8} @rgb;
-  }
-  if (my @rgb = ($colour =~ /^#([0-9A-F]{4})([0-9A-F]{4})([0-9A-F]{4})$/i)) {
-    return map {hex() >> 16} @rgb;
   }
 
   my $colour_obj = Wx::ColourDatabase::Find($colour);

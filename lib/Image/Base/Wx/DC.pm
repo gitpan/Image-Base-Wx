@@ -20,7 +20,7 @@ use 5.008;
 use strict;
 use Carp;
 use Wx;
-our $VERSION = 1;
+our $VERSION = 2;
 
 use Image::Base;
 our @ISA = ('Image::Base');
@@ -296,11 +296,10 @@ Colour names are anything recognised by C<< Wx::Colour->new() >>, which as
 per its C<Set()> method means
 
     "pink"            names per wxColourDatabase
-    "#RGB"            1 to 4 digit hex
-    "#RRGGBB"
-    "#RRRGGGBBB"
-    "#RRRRGGGGBBB"
+    "#RRGGBB"         2 digit hex
     "RGB(r,g,b)"      decimal 0 to 255
+
+1,3 or 4 digit hex might work too, but might be platform dependent.
 
 The colour is applied to the "pen" in the C<-dc>, and for filling to the
 "brush" too.  The pen is also set to C<wxCAP_PROJECTING> to ensure the last
