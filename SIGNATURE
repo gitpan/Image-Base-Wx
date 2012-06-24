@@ -15,12 +15,12 @@ not run its Makefile.PL or Build.PL.
 Hash: SHA1
 
 SHA1 842745cb706f8f2126506f544492f7a80dbe29b3 COPYING
-SHA1 74ec7646da6422ebe72bdecc9c9d626d0be46ec3 Changes
+SHA1 3bcc3afd1fc2705eae671cbc0367064888a95850 Changes
 SHA1 1dac7aa3441946faeb5f527c966ef83cc394dbe5 MANIFEST
 SHA1 6e3dfa4a933a1a5da6c934cca324fc40495b2f5d MANIFEST.SKIP
-SHA1 2154d5447639af694d5d729d0cac7b5eb93265cf META.yml
+SHA1 c4f78ec79c20b00e85de8bf45d2e06ad4eb26a0d META.yml
 SHA1 06d02651f8cfedee36fec2ea32ca6d1432a64108 Makefile.PL
-SHA1 f3dd3011ef7f25a6cb6c704ad3423263859a1450 debian/changelog
+SHA1 bb8c1ce4d9a0dfbc794e4657f8e0475d7f86da25 debian/changelog
 SHA1 ac3478d69a3c81fa62e60f5c3696165a4e5e6ac4 debian/compat
 SHA1 01ba5728a7db4d1dd361f17f98e27ff487c1fcab debian/control
 SHA1 ef0538410e105aa87c20ddd36eb92d097d898b99 debian/copyright
@@ -36,14 +36,14 @@ SHA1 67223ca3c33d9759fd3569d90a580ab16ac5bf7d devel/exe-bitmap-load-xpm.cc
 SHA1 9a5c57bfacf74be70a80dc6bd3d2e3bb26f5f384 devel/image.pl
 SHA1 7490c21419a5c0094e62b70870f22e3ec38dc776 devel/log.pl
 SHA1 73b45edd7c7675a9793ad4cb3232002b1af9435e devel/magick.pl
-SHA1 b9d448e83a8782fadbd50ede0717ec79afca5b85 lib/Image/Base/Wx/Bitmap.pm
-SHA1 ccf353d041acd540674634328fa3c4282d18a702 lib/Image/Base/Wx/DC.pm
-SHA1 051bbc2a3b24198a6a5844137375196c531a3843 lib/Image/Base/Wx/Image.pm
+SHA1 283fefdba1bcc1e72f73f2e726bc594e0c27a83c lib/Image/Base/Wx/Bitmap.pm
+SHA1 aaa6490c27e8b93028d00884ad1d6ec6860ca400 lib/Image/Base/Wx/DC.pm
+SHA1 d53be884c42ccc1494dd0aba6dbd058d99e81432 lib/Image/Base/Wx/Image.pm
 SHA1 981f2c75dad47cecbfb663268d941459aa2842af t/Bitmap-weaken.t
-SHA1 6c9887bd45d55727372e3a641b6dc95df0ff7777 t/Bitmap.t
-SHA1 d0432eb7eb94ef75624036460a1afda0cb228f7a t/DC.t
+SHA1 36ff495fff6bda5416c00367f129f00ce9f2f3c1 t/Bitmap.t
+SHA1 a4e7f55f74cefdd20acbc78a3bd443d9bc14ec8d t/DC.t
 SHA1 e556fdb03f27b18dc28a8b7fb066c9ef4fc22d1a t/Image-weaken.t
-SHA1 0451c3a331f9e4029fa7f35d2b0aaefaf21fbb8b t/Image.t
+SHA1 ba4fd13415f2d89357be298f2747e1b4299ca7f9 t/Image.t
 SHA1 3855de075da37f5bc4e6a5534b2f00cc14872a98 t/MyTestHelpers.pm
 SHA1 f0fb4938250b2c5be37363f238c5130fd583df84 t/MyTestImageBase.pm
 SHA1 811028548aa4b360b5086d1af3150f9dde348aa6 xt/0-META-read.t
@@ -70,7 +70,7 @@ SHA1 631dabf52c65a7b8613d6565fef2c2416ebba7e9 xtools/my-wunused.sh
 -----BEGIN PGP SIGNATURE-----
 Version: GnuPG v1.4.11 (GNU/Linux)
 
-iD8DBQFP37sBLFMCIV9q3ToRAhzOAJ98qb7bWbBfT4JIfgAbD2OSbT/R/QCdGlBZ
-lRTh10l+f4yohWsSSsEtHWg=
-=+/89
+iD8DBQFP5lfwLFMCIV9q3ToRApWbAKC5BOt0dRCS3EezIL6RxKYUJzq6WgCgmWBd
+zshOeo5mDEeAMvrJifPUAVY=
+=Z7zf
 -----END PGP SIGNATURE-----

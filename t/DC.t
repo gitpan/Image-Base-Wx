@@ -28,7 +28,7 @@ BEGIN { MyTestHelpers::nowarnings() }
 eval { require Wx }
   or plan skip_all => "due to Wx display not available -- $@";
 
-plan tests => 2495;
+plan tests => 2492;
 
 use_ok ('Image::Base::Wx::DC');
 diag "Image::Base version ", Image::Base->VERSION;
@@ -43,7 +43,7 @@ $dc->SetPen($pen);
 #------------------------------------------------------------------------------
 # VERSION
 
-my $want_version = 2;
+my $want_version = 3;
 is ($Image::Base::Wx::DC::VERSION,
     $want_version, 'VERSION variable');
 is (Image::Base::Wx::DC->VERSION,
@@ -157,13 +157,6 @@ ok (! eval { Image::Base::Wx::DC->VERSION($check_version); 1 },
   is ($image->xy (2,2), '#000000', 'xy()  ');
   is ($image->xy (3,3), '#FFFFFF', 'xy() *');
   is ($image->xy (4,4), '#FFFFFF', 'xy() *');
-
-  $image->xy (4,4, '#f0f');
-  is ($image->xy (4,4), '#FF00FF', 'xy() #f0f');
-  $image->xy (4,4, '#000fff000');
-  is ($image->xy (4,4), '#00FF00', 'xy() #000fff000');
-  $image->xy (4,4, '#ffff0000ffff');
-  is ($image->xy (4,4), '#FF00FF', 'xy() #f0f');
 }
 
 #------------------------------------------------------------------------------

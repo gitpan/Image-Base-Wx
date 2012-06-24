@@ -20,7 +20,7 @@ use 5.008;
 use strict;
 use Carp;
 use Wx;
-our $VERSION = 2;
+our $VERSION = 3;
 
 use Image::Base;
 our @ISA = ('Image::Base');
@@ -142,8 +142,46 @@ sub rectangle {
   my ($self, $x1, $y1, $x2, $y2, $colour, $fill) = @_;
   # ### Image-DC rectangle: "$x1, $y1, $x2, $y2, $colour, $fill"
 
-  _dc_fill($self,$colour,$fill)->DrawRectangle ($x1, $y1, $x2-$x1+1, $y2-$y1+1);
+  # Under msdos a 1x1 rectangle seems to draw no pixels, neither for filled
+  # or unfilled.  Try DrawPoint() for that case.
+  if ($x1==$x2 && $y1==$y2) {
+    _dc_pen($self,$colour)->DrawPoint ($x1, $y1);
+  } else {
+    _dc_fill($self,$colour,$fill)->DrawRectangle ($x1, $y1,
+                                                  $x2-$x1+1, $y2-$y1+1);
+  }
 }
+
+my $ellipse_x_extra = 0;
+my $ellipse_y_extra = 0;
+# {
+#   my $wxbitmap = Wx::Bitmap->new(20,10);
+#   my $dc = Wx::MemoryDC->new;
+#   $dc->SelectObject($wxbitmap);
+#   {
+#     my $pen = $dc->GetPen;
+#     my $colour_obj = Wx::Colour->new('#FF00FF');
+#     $colour_obj->IsOk or die;
+#     $pen->SetColour($colour_obj);
+#     $dc->SetPen($pen);
+#   }
+#   for ($ellipse_x_extra = -3; $ellipse_x_extra <= 2; $ellipse_x_extra++) {
+#     $dc->DrawEllipse(0,0, 6+$ellipse_x_extra, 6+$ellipse_y_extra);
+#     my $colour_obj = $dc->GetPixel(5,2);
+#     if ($colour_obj->GetAsString(Wx::wxC2S_HTML_SYNTAX()) eq '#FF00FF') {
+#       last;
+#     }
+#   }
+#   for ($ellipse_y_extra = -3; $ellipse_y_extra <= 2; $ellipse_y_extra++) {
+#     $dc->DrawEllipse(0,0, 6+$ellipse_x_extra, 6+$ellipse_y_extra);
+#     my $colour_obj = $dc->GetPixel(2,5);
+#     if ($colour_obj->GetAsString(Wx::wxC2S_HTML_SYNTAX()) eq '#FF00FF') {
+#       last;
+#     }
+#   }
+# }
+### $ellipse_x_extra
+### $ellipse_y_extra
 
 sub ellipse {
   my ($self, $x1, $y1, $x2, $y2, $colour, $fill) = @_;
@@ -156,17 +194,25 @@ sub ellipse {
   #
   my $w = $x2-$x1;
   my $h = $y2-$y1;
-  my $dc = _dc_fill($self,$colour,$fill);
   if ($w == 0 || $h == 0) {
-    $dc->DrawRectangle ($x1, $y1, $w+1, $h+1);
+    _dc_pen($self,$colour)->DrawRectangle ($x1, $y1, $w+1, $h+1);
   } else {
-    $dc->DrawEllipse ($x1,$y1, $w, $h);
+    _dc_fill($self,$colour,$fill)->DrawEllipse ($x1,$y1,
+                                                $w + $ellipse_x_extra,
+                                                $h + $ellipse_y_extra);
   }
 }
 
 sub diamond {
   my ($self, $x1, $y1, $x2, $y2, $colour, $fill) = @_;
   ### Image-DC diamond: "$x1, $y1, $x2, $y2, $colour, ".($fill||0)
+
+  if ($x1==$x2 && $y1==$y2) {
+    # Under msdos a polygon with all points the same seems to draw no pixels.
+    # Try DrawPoint() instead.
+    _dc_pen($self,$colour)->DrawPoint ($x1, $y1);
+    return;
+  }
 
   my $xh = ($x2 - $x1);
   my $yh = ($y2 - $y1);
