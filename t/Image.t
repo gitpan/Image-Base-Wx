@@ -40,7 +40,7 @@ diag "Image::Base version ", Image::Base->VERSION;
 #------------------------------------------------------------------------------
 # VERSION
 
-my $want_version = 3;
+my $want_version = 4;
 is ($Image::Base::Wx::Image::VERSION,
     $want_version, 'VERSION variable');
 is (Image::Base::Wx::Image->VERSION,

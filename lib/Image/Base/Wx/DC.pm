@@ -20,7 +20,7 @@ use 5.008;
 use strict;
 use Carp;
 use Wx;
-our $VERSION = 3;
+our $VERSION = 4;
 
 use Image::Base;
 our @ISA = ('Image::Base');
@@ -189,13 +189,13 @@ sub ellipse {
 
   # Something fishy happens when width=0 or height=0 to DrawEllipse() where
   # the last pixel is not drawn.  Might be the usual X11 left/above rule, or
-  # wx not coping with that rule.  In any case Nx1 and 1xN can be done as
-  # rectangles.
+  # wx not coping with that rule.  In any case Nx1 and 1xN done as
+  # rectangle() (and it in turn handles 1x1 case).
   #
   my $w = $x2-$x1;
   my $h = $y2-$y1;
   if ($w == 0 || $h == 0) {
-    _dc_pen($self,$colour)->DrawRectangle ($x1, $y1, $w+1, $h+1);
+    $self->rectangle ($x1,$y1, $x2,$y2, $colour, 1);
   } else {
     _dc_fill($self,$colour,$fill)->DrawEllipse ($x1,$y1,
                                                 $w + $ellipse_x_extra,
@@ -345,12 +345,13 @@ per its C<Set()> method means
     "#RRGGBB"         2 digit hex
     "RGB(r,g,b)"      decimal 0 to 255
 
-1,3 or 4 digit hex might work too, but might be platform dependent.
+1,3 or 4 digit hex are platform dependent.  They work under Gtk, but not
+under MS-Windows.
 
 The colour is applied to the "pen" in the C<-dc>, and for filling to the
 "brush" too.  The pen is also set to C<wxCAP_PROJECTING> to ensure the last
-pixel is drawn for C<line()>.  That might be an artifact of the X11 "on the
-boundary above or left" rule, but in any case gets the right effect.
+pixel is drawn for C<line()>.  That might be an artifact of the X11 pixel
+rule "on the boundary above or left", but in any case gets the right effect.
 
 If the colour etc in the C<-dc> is changed elsewhere then what
 C<Image::Base::Wx::DC> thinks it has set will be invalid.  Set C<-dc> into

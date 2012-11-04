@@ -21,7 +21,7 @@ use 5.008;
 use strict;
 use Carp;
 use Wx;
-our $VERSION = 3;
+our $VERSION = 4;
 
 use Image::Base::Wx::DC;
 our @ISA = ('Image::Base::Wx::DC');

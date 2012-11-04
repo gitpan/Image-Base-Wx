@@ -16,6 +16,9 @@ You can get a copy of the GNU General Public License online at
 <http://www.gnu.org/licenses/>.
 
 
+Version 4, November 2012
+    - oops, fix for DC ellipse watch out for 1x1
+
 Version 3, June 2012
     - DC rectangle and ellipse watch out for 1x1
 
